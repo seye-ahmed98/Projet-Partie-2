@@ -1,54 +1,37 @@
 <?php
-// Base de données de tes réalisations
-$mes_projets = [
-    // --- NOUVEAUX PROJETS ---
-    [
-        "titre" => "Gestion de Bibliothèque", 
-        "tag" => "Java / POO / ArrayList", 
-        "desc" => "Application de gestion d'inventaire utilisant l'héritage pour traiter différents types de documents (Livres, DVD).", 
-        "img" => "java.png"
-    ],
-    [
-        "titre" => "Infrastructure pfSense", 
-        "tag" => "Cybersécurité / Réseaux", 
-        "desc" => "Configuration d'un firewall avec filtrage de paquets, IDS Suricata et déploiement d'un accès VPN sécurisé.", 
-        "img" => "pfsense.png"
-    ],
-    // --- PROJETS EXISTANTS ---
-    [
-        "titre" => "Résolution Numérique", 
-        "tag" => "Langage C / Algorithmique", 
-        "desc" => "Développement d'un algorithme de résolution d'équations non linéaires (Méthode de la Sécante).", 
-        "img" => "Calcul numérique.png"
-    ],
-    [
-        "titre" => "Poubelle Intelligente", 
-        "tag" => "Arduino / ESP32 / Wi-Fi", 
-        "desc" => "Système IoT connecté permettant de surveiller le niveau et l'état environnemental en temps réel.", 
-        "img" => "poubelle.jpeg"
-    ],
-    [
-        "titre" => "Villas Mbour 4", 
-        "tag" => "SketchUp / AutoCAD", 
-        "desc" => "Modélisation 3D et plans techniques pour un projet immobilier à Thiès (Mbour 4).", 
-        "img" => "Bat1.JPG"
-    ],
-    [
-        "titre" => "Ferme intégrée", 
-        "tag" => "Agriculture / Elevage", 
-        "desc" => "Projet innovant intégrant agriculture et élevage pour l'autonomisation au Sénégal.", 
-        "img" => "Entrepreneuriat.jpeg"
-    ],
-    [
-        "titre" => "Villas Médina FALL", 
-        "tag" => "SketchUp / AutoCAD", 
-        "desc" => "Conception architecturale, modélisation 3D et plans techniques (Quartier Médina FALL).", 
-        "img" => "Bat2.JPG"
-    ],
-    [
-        "titre" => "Attaque brute force", 
-        "tag" => "Kali Linux / Metasploitable", 
-        "desc" => "Simulation de scénarios réels d'intrusion pour concevoir des politiques de défense réseau.", 
-        "img" => "sec.png"
-    ]
-];
+// Au tout début de votre fichier projets.php
+require_once 'config/connexion.php';
+require_once 'fonctions.php';
+
+try {
+    // Récupération des projets depuis la base de données
+    $stmt = $pdo->query("SELECT * FROM projets ORDER BY date_creation DESC");
+    $mes_projets_bdd = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Erreur affichage projets : " . $e->getMessage());
+    $mes_projets_bdd = [];
+}
+?>
+
+<div class="projets-container">
+    <?php if (empty($mes_projets_bdd)): ?>
+        <p style="text-align: center; color: #94a3b8;">Aucun projet à afficher pour le moment.</p>
+    <?php else: ?>
+        <?php foreach ($mes_projets_bdd as $projet): ?>
+            <div class="projet-card">
+                <div class="projet-image">
+                    <img src="images/projets/<?= nettoyer($projet['image']) ?>" alt="<?= nettoyer($projet['titre']) ?>">
+                </div>
+                <div class="projet-infos">
+                    <span class="badge"><?= nettoyer($projet['categorie']) ?></span>
+                    <h3><?= nettoyer($projet['titre']) ?></h3>
+                    <p><?= nl2br(nettoyer($projet['description'])) ?></p>
+                    
+                    <?php if (!empty($projet['lien']) && $projet['lien'] !== '#'): ?>
+                        <a href="<?= nettoyer($projet['lien']) ?>" target="_blank" class="btn-projet">Voir le projet</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>

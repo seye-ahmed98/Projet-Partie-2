@@ -1,7 +1,27 @@
 <?php 
+// 1. Initialisation de la session (Obligatoire avant tout traitement ou affichage)
+session_start();
+
 require_once 'fonctions.php';
+// Inclusion de la connexion à la base de données
+require_once 'config/connexion.php'; 
+
+// 2. JOURNALISATION AUTOMATIQUE (Exigence Section 4.1)
+// Enregistre l'adresse IP, le nom de la page et la date actuelle
+enregistrer_visite($pdo, 'Accueil');
+
 $titre_page = "Accueil | Ahmed SEYE";
 require_once 'composants/navigation.php'; 
+
+// Récupération des 3 derniers projets insérés en base de données
+try {
+    $stmt = $pdo->query("SELECT * FROM projets ORDER BY date_creation DESC LIMIT 3");
+    $projets_recents = $stmt->fetchAll();
+} catch (PDOException $e) {
+    // Écrit l'erreur réelle dans les logs du serveur (Exigence Section 3.1)
+    error_log("Erreur SQL Accueil : " . $e->getMessage());
+    $projets_recents = []; // Tableau vide pour éviter de bloquer la page
+}
 ?>
 
 <section id="accueil" class="hero-section">
@@ -15,7 +35,7 @@ require_once 'composants/navigation.php';
             <p class="hero-desc">Je combine la rigueur du code avec la précision des outils de DAO pour créer des solutions d'habitat intelligent et durable.</p>
     
             <div class="hero-btns">
-                <a href="projets.php" class="btn-terminal">Consulter mes projets</a>
+                <a href="#projets-recents" class="btn-terminal">Consulter mes projets</a>
             </div>
         </div>
 
@@ -106,6 +126,66 @@ require_once 'composants/navigation.php';
                 <p class="timeline-text">Formation en management, droit des affaires et finance d'entreprise.</p>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- SECTION DYNAMIQUE : PROJETS RÉCENTS -->
+<section id="projets-recents" class="container projets-recent-section">
+    <div class="projets-section-header">
+        <span class="parcours-subtitle">TRAVAUX RÉCENTS</span>
+        <h2 class="parcours-main-title">Mes Dernières <span class="text-blue">Réalisations</span></h2>
+    </div>
+
+    <div class="projets-grid">
+        <?php if (!empty($projets_recents)): ?>
+            <?php foreach ($projets_recents as $projet): ?>
+                <div class="glass-cyber-card projet-card">
+                    
+                    <div class="projet-image-wrapper">
+                        <?php if (!empty($projet['image'])): ?>
+                            <img src="images/projets/<?= nettoyer($projet['image']) ?>" alt="<?= nettoyer($projet['titre']) ?>" class="projet-img">
+                        <?php else: ?>
+                            <div class="projet-no-image">
+                                <i class="fas fa-image fa-3x"></i>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <!-- Remplacement de categorie (inexistante) par les technologies utilisées -->
+                        <span class="projet-badge">
+                            <?= nettoyer($projet['technologies']) ?>
+                        </span>
+                    </div>
+
+                    <div class="projet-content">
+                        <h3 class="projet-title"><?= nettoyer($projet['titre']) ?></h3>
+                        <p class="projet-desc">
+                            <?= strlen($projet['description']) > 120 ? substr(nettoyer($projet['description']), 0, 120) . '...' : nettoyer($projet['description']) ?>
+                        </p>
+                        
+                        <div class="projet-actions">
+                            <!-- Alignement sur la colonne unique 'lien' imposée par le sujet (Section 2.1) -->
+                            <?php if (!empty($projet['lien'])): ?>
+                                <a href="<?= nettoyer($projet['lien']) ?>" target="_blank" class="btn-terminal">
+                                    <i class="fas fa-external-link-alt"></i> Voir le projet
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="projets-vide">
+                <i class="fas fa-folder-open fa-2x"></i>
+                <p>Aucun projet n'est encore publié. Rendez-vous sur votre Admin Panel pour en ajouter !</p>
+            </div>
+        <?php endif; ?>
+    </div>
+    
+    <div class="projets-footer">
+        <a href="projets.php" class="link-voir-plus">
+            Voir toutes mes réalisations <i class="fas fa-arrow-right"></i>
+        </a>
     </div>
 </section>
 
@@ -242,7 +322,7 @@ require_once 'composants/navigation.php';
 </section>
 
 <section id="contact" style="display: none;">
-    </section>
+</section>
 
 <?php 
 require_once 'composants/pied-de-page.php'; 

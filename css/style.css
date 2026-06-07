@@ -1128,3 +1128,280 @@ footer {
     color: var(--text-muted);
     font-size: 0.8rem;
 }
+
+
+/* ============================================================
+   SECTION DYNAMIQUE : PROJETS RÉCENTS (AJUSTEMENTS ET ALIGNEMENT)
+   ============================================================ */
+
+.projets-recent-section {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.05);
+}
+
+.projets-section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+/* Conteneur d'image synchronisé avec l'index PHP */
+.projet-image-wrapper {
+    width: 100%;
+    height: 200px; /* Hauteur fixe pour aligner toutes les cartes */
+    overflow: hidden;
+    background: #0f172a;
+    position: relative;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.projet-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Recadre proprement sans déformer */
+    transition: transform 0.3s ease;
+}
+
+/* Zoom de l'image au survol de la carte */
+.glass-cyber-card.projet-card:hover .projet-img {
+    transform: scale(1.05);
+}
+
+/* Gestion du badge de catégorie dynamique */
+.projet-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: rgba(16, 185, 129, 0.1); /* Utilise votre lueur accentuée */
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 4px 12px;
+    border-radius: 6px;
+    z-index: 2;
+}
+
+/* Affichage si aucune image n'est disponible */
+.projet-no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted);
+    background: rgba(15, 23, 42, 0.6);
+}
+
+/* Contenu textuel interne */
+.projet-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Pousse le bas de la carte pour égaliser les hauteurs */
+}
+
+.projet-title {
+    margin: 0 0 12px 0;
+    font-size: 1.3rem;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.projet-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+}
+
+/* Alinement des boutons Github et Démo */
+.projet-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto; /* Force les boutons à s'aligner en bas de la carte */
+}
+
+.btn-code {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.btn-code:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--text-muted);
+    transform: translateY(-2px);
+}
+
+.btn-demo {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+    transition: all 0.25s ease;
+}
+
+.btn-demo:hover {
+    background: var(--accent);
+    color: #070b19; /* Devient sombre pour contraster avec le vert lumineux */
+    box-shadow: 0 0 15px var(--accent-glow);
+    transform: translateY(-2px);
+}
+
+/* Style de l'état vide si aucun projet n'est en BDD */
+.projets-vide {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    background: var(--bg-card);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+    border-radius: 16px;
+    color: var(--text-muted);
+}
+
+.projets-vide i {
+    color: var(--accent);
+    margin-bottom: 15px;
+}
+
+/* Zone du lien "Voir toutes mes réalisations" */
+.projets-footer {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.link-voir-plus {
+    font-family: var(--font-code);
+    color: var(--text-blue);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.link-voir-plus i {
+    transition: transform 0.25s ease;
+}
+
+.link-voir-plus:hover {
+    color: #60a5fa;
+}
+
+.link-voir-plus:hover i {
+    transform: translateX(5px); /* Petit effet de flèche qui se déplace au survol */
+}
+
+
+
+/* ============================================================
+   PAGE CONTACT - STYLES GLOBAUXAhmed SEYE
+   ============================================================ */
+
+/* Conteneur principal */
+.contact-main {
+    padding-top: 120px;
+    padding-bottom: 60px;
+}
+
+/* Grille adaptative pour les 3 blocs */
+.contact-grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px;
+}
+
+/* Cartes communes de contact */
+.contact-card {
+    padding: 30px; 
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+.contact-card h2 {
+    margin-top: 0;
+}
+
+.text-blue { 
+    color: #007bff; 
+}
+
+/* Liens et interactivité */
+.contact-link { 
+    color: #ffffff; 
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+}
+
+.contact-card p:hover .contact-link { 
+    color: #007bff; 
+    text-decoration: underline; 
+}
+
+.contact-icon { 
+    transition: transform 0.3s ease; 
+}
+
+.contact-card p:hover .contact-icon { 
+    transform: scale(1.2); 
+}
+
+/* Alertes et notifications */
+.alert-success { 
+    background: #10b981; 
+    color: white; 
+    padding: 15px; 
+    border-radius: 8px; 
+    text-align: center; 
+    margin-bottom: 20px; 
+    font-weight: bold; 
+}
+
+.alert-danger {
+    background: #ff4d4d; 
+    color: white; 
+    padding: 15px; 
+    border-radius: 8px; 
+    text-align: center; 
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Éléments de formulaire & Boutons style terminal */
+.btn-terminal { 
+    background: #007bff; 
+    color: white; 
+    border: none; 
+    padding: 12px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    font-family: monospace; 
+    font-weight: bold; 
+}
+
+.btn-terminal:hover { 
+    background: #0056b3; 
+    transform: translateY(-2px); 
+}
